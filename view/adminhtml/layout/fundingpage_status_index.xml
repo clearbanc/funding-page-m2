@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <title>
+            Funding Status
+        </title>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Clearbanc\FundingPage\Block\Display" template="Clearbanc_FundingPage::status.phtml"/>
+        </referenceContainer>
+    </body>
+</page>
+  

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+      <add 
+        id="Clearbanc_FundingPage::funding" 
+        title="Funding" 
+        translate="title" 
+        module="Clearbanc_FundingPage" 
+        parent="Magento_Backend::system" 
+        sortOrder="50" 
+        dependsOnModule="Clearbanc_FundingPage" 
+        resource="Clearbanc_FundingPage::funding"/>
+      <add 
+        id="Clearbanc_FundingPage::funding_status" 
+        title="Status" 
+        translate="title" 
+        module="Clearbanc_FundingPage" 
+        parent="Clearbanc_FundingPage::funding" 
+        sortOrder="10" 
+        dependsOnModule="Clearbanc_FundingPage" 
+        action="fundingpage/status" 
+        resource="Clearbanc_FundingPage::funding"/>
+    </menu>
+</config>
+  

@@ -1,0 +1,315 @@
+<?php
+$_last30DayOrders = $block->getLast30DaysOrders();
+$_lastYearOrders = $block->getLastYearOrders();
+$_totalRev = $block->getLast30DaySum();
+// $block->sendNotification();
+
+$last30DayOrderArray = [];
+foreach ($_last30DayOrders as $key => $post) {
+  $order = $post->getData();
+  $item = array(
+    "date" => $order['created_at'],
+    "amount" => $order['grand_total']
+  );
+  array_push($last30DayOrderArray, json_encode($item));
+}
+
+$lastYearOrderArray = [];
+foreach ($_lastYearOrders as $key => $post) {
+  $order = $post->getData();
+  $item = array(
+    "date" => $order['created_at'],
+    "amount" => $order['grand_total']
+  );
+  array_push($lastYearOrderArray, json_encode($item));
+}
+?>
+
+<html>
+
+<head>
+  <!--Load the AJAX API-->
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    // Load the Visualization API and the corechart package.
+    google.charts.load('current', {
+      'packages': ['corechart']
+    });
+
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.charts.setOnLoadCallback(loadCharts);
+
+    var minRevenueNeeded = Number(<?php echo $block->getMinRevenue() ?>);
+    var last30DayRevenue = Number(<?php echo $_totalRev ?>);
+
+    function loadCharts() {
+      if (last30DayRevenue > minRevenueNeeded) {
+        document.getElementById('redirect-button').style.display = "block";
+      } else {
+        document.getElementById('redirect-button').style.display = "none";
+      }
+      document.getElementById('redirect-button').style.display = "block";
+      drawSalesHistoryChart();
+      calculateFigures();
+      var loader = document.getElementById('loader');
+      loader.classList.toggle('dissapear');
+      document.getElementById('loader').style.display = 'none'
+      document.getElementsByClassName('magento-analytics')[0].style.visibility = 'visible';
+    }
+
+    function drawSalesHistoryChart() {
+      var data = new google.visualization.DataTable();
+      var last30DayOrderArray = <?php echo json_encode($last30DayOrderArray); ?>;
+
+      // Google charts will mess up in data is not sorted
+      var sorted = last30DayOrderArray.sort(function sortByDate(a, b) {
+        adate = new Date(JSON.parse(a).date);
+        bdate = new Date(JSON.parse(b).date);
+        return bdate < adate ? 1 :
+          bdate > adate ? -1 :
+          0;
+      });
+      last30DayOrderArray = sorted;
+
+      var total = 0.00;
+      data.addColumn('date', 'Time');
+      data.addColumn('number', 'Sales Aggregate for Last 30 Days');
+      last30DayOrderArray.forEach((order) => {
+        order = JSON.parse(order)
+        date = new Date(order.date)
+        total += Number(order.amount)
+        data.addRow([date, total]);
+      })
+
+      var options = {
+        title: "Sales Aggregate for Last 30 Days",
+        backgroundColor: 'transparent',
+        colors: ['cornflowerblue', 'tomato'],
+        fontName: 'Open Sans',
+        focusTarget: 'category',
+        chartArea: {
+          left: 50,
+          top: 10,
+          width: '90%',
+          height: '70%'
+        },
+        hAxis: {
+          textStyle: {
+            fontSize: 11
+          },
+          baselineColor: 'transparent',
+          gridlines: {
+            color: 'transparent'
+          }
+        },
+        vAxis: {
+          minValue: 0,
+          baselineColor: '#DDD',
+          gridlines: {
+            color: '#DDD',
+            count: 4
+          },
+          textStyle: {
+            fontSize: 11
+          }
+        },
+        legend: {
+          position: 'bottom',
+          textStyle: {
+            fontSize: 12
+          }
+        },
+        animation: {
+          duration: 1200,
+          easing: 'out',
+          startup: true
+        },
+      };
+
+      var chart = new google.visualization.AreaChart(document.getElementsByClassName('external-accounts-revenue-chart')[0]);
+      chart.draw(data, options);
+    }
+
+    function calculateFigures() {
+      var annualTotal = 0.00;
+      var futureRevenue = 0.00;
+      const currDate = new Date();
+      const minus90Days = currDate.setDate(currDate.getDate() - 90);
+      var lastYearOrderArray = <?php echo json_encode($lastYearOrderArray); ?>;
+
+      console.log('printing');
+      console.log(lastYearOrderArray);
+
+      lastYearOrderArray.forEach((order) => {
+        order = JSON.parse(order)
+        // accumulate annual total
+        annualTotal += Number(order.amount)
+        var date = new Date(order.date);
+        var month = date.getMonth() + 1;
+        var key = date.getFullYear() + '-' + (month < 10 ? '0' : '') + month;
+
+        if (date > minus90Days) {
+          futureRevenue += 0.4 * order.amount;
+        } else {
+          futureRevenue += 0.3 * order.amount;
+        }
+      })
+      // Expected future revenue: (0.4 x 90d + 0.3 x 180d + 0.3 x 360d)
+      marketingBudget = '$' + (futureRevenue * 0.185).toFixed(2);
+      futureRevenue = '$' + futureRevenue.toFixed(2);
+      annualMonthlyAvg = '$' + (annualTotal / 12).toFixed(2);
+      document.getElementById('12-month-avg').innerHTML = annualMonthlyAvg;
+      document.getElementById('future-revenue').innerHTML = futureRevenue;
+      document.getElementById('marketing-budget').innerHTML = marketingBudget;
+    }
+  </script>
+</head>
+
+<body>
+  <img id='loader' algin="center" src="<?php echo $this->getViewFileUrl('Clearbanc_FundingPage::images/loader.svg'); ?>">
+  <div class="magento-analytics" align="center" background="#F6F8FB">
+    <img class="magento-analytics__logo" src="<?php echo $this->getViewFileUrl('Clearbanc_FundingPage::images/clearbanc-logo.svg'); ?>" />
+    <div class="magento-analytics__subtitle">We analyze your sales data to provide business intelligence on your ad spend and recommended marketing budget to acceletrate growth.</div>
+    <div class='external-accounts-revenue-chart'></div>
+    <div class="magento-analytics__stats">
+      <div class='info-item'>
+        <h4> Last 12 months average revenue</h4>
+        <p id='12-month-avg'></p>
+        <img src="<?php echo $this->getViewFileUrl('Clearbanc_FundingPage::images/flat-fee-icon.png'); ?>">
+      </div>
+      <div class='info-item'>
+        <h4> Expected future revenue</h4>
+        <p id='future-revenue'></p>
+        <img src="<?php echo $this->getViewFileUrl('Clearbanc_FundingPage::images/budget-icon.png'); ?>">
+      </div>
+      <div class='info-item'>
+        <h4> Recommended marketing budget</h4>
+        <p id='marketing-budget'></p>
+        <img src="<?php echo $this->getViewFileUrl('Clearbanc_FundingPage::images/apply-icon.png'); ?>">
+      </div>
+    </div>
+    <button id='redirect-button' onclick="window.open('https://clearbanc.com','_blank');">Visit Clearbanc</button>
+    </template>
+  </div>
+</body>
+
+<style>
+  #loader {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10%;
+    width: 50%;
+    max-height: 200px;
+    opacity: 1;
+    -webkit-transition: opacity 2s ease;
+    -moz-transition: opacity 2s ease;
+    -ms-transition: opacity 2s ease;
+    -o-transition: opacity 2s ease;
+    transition: opacity 2s ease;
+  }
+
+  #loader.dissapear {
+    opacity: 0;
+  }
+
+  #not-qualified-message {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+  }
+
+  .magento-analytics {
+    visibility: hidden;
+    min-height: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 20px;
+    justify-content: space-around;
+
+    h2 {
+      color: white;
+      margin-bottom: 5px;
+    }
+  }
+
+  .magento-analytics .magento-analytics__stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin: 30px 0;
+  }
+
+  .magento-analytics .magento-analytics__stats .info-item {
+    flex-direction: column;
+    display: flex;
+    align-items: flex-start;
+    max-width: 280px;
+    margin-top: 20px;
+  }
+
+  .magento-analytics .magento-analytics__stats .info-item h4 {
+    line-height: 20px;
+    color: black;
+    font-weight: normal;
+    padding-top: 20px;
+  }
+
+  .magento-analytics .magento-analytics__stats .info-item p {
+    color: black;
+    font-size: 16px;
+    margin: 0;
+  }
+
+  .magento-analytics .magento-analytics__stats .info-item img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+  }
+
+
+  .magento-analytics .magento-analytics__subtitle {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+  }
+
+  .magento-analytics .magento-analytics__logo {
+    display: block;
+    height: 40px;
+  }
+
+  .magento-analytics .magento-analytics__logo svg {
+    height: 100%;
+  }
+
+  .magento-analytics .redirect-button {
+    display: block;
+    width: 100%;
+    max-width: 280px;
+    margin: 0 auto;
+
+    cursor: pointer;
+    border-radius: 3px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0);
+    line-height: 1.15rem;
+    text-align: center;
+
+    text-shadow: none;
+
+    transition: .25s all;
+
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 12px;
+
+    user-select: none;
+
+    padding: 8px 20px;
+  }
+</style>
+
+</html>
