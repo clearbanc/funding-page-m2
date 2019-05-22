@@ -10,6 +10,15 @@ class Sales
 
     protected $authSession;
 
+    /**
+     * Contructor for Cron
+     *
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
+     * @param \Magento\Store\Model\Information $storeInfo
+     * @param \Clearbanc\FundingPage\Helper\Calculator $calculator
+     * @param \Magento\AdminNotification\Model\InboxFactory $inboxFactory
+     */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
@@ -24,6 +33,11 @@ class Sales
         $this->_inboxFactory = $inboxFactory;
     }
 
+    /**
+     * Function to send notification to the user if they qualify
+     *
+     * @return void
+     */
     public function sendNotification()
     {
         $inboxCollection = $this->_inboxFactory->create()->getCollection();
@@ -31,6 +45,7 @@ class Sales
         $message = "Visit CLEARBANC.COM for more information.";
         $send = true;
 
+        // TODO add this back once everything is validated
         //foreach ($inboxCollection as $item) {
             //$notification = $item->getData();
             //if ($notification['title'] == $title && $notification['description'] == $message) {
@@ -41,13 +56,10 @@ class Sales
         if ($send) {
             $this->_inboxFactory->create()->addNotice($title, $message);
         }
-
-        return $resultPage = $this->resultPageFactory->create();
-
     }
 
     /**
-     * Send notification if account is qualified 
+     * Execute the cron job for clearbanc funding status
      * 
      * @return void
      */
