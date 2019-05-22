@@ -20,13 +20,14 @@ class QualifiedMessage implements \Magento\Framework\Notification\MessageInterfa
 
   public function getText()
   {
+    return 'Text';
     // Retrieve message text
-    return 'Notification message text goes here';
+    //return 'Notification message text goes here';
   }
 
   public function getSeverity()
   {
     // Possible values: SEVERITY_CRITICAL, SEVERITY_MAJOR, SEVERITY_MINOR, SEVERITY_NOTICE
-    return self::SEVERITY_MAJOR;
+    return self::SEVERITY_NOTICE;
   }
 }
