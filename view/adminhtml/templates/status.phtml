@@ -136,9 +136,6 @@ foreach ($_lastYearOrders as $key => $post) {
       const minus90Days = currDate.setDate(currDate.getDate() - 90);
       var lastYearOrderArray = <?php echo json_encode($lastYearOrderArray); ?>;
 
-      console.log('printing');
-      console.log(lastYearOrderArray);
-
       lastYearOrderArray.forEach((order) => {
         order = JSON.parse(order)
         // accumulate annual total

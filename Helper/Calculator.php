@@ -5,7 +5,7 @@ use \Magento\Framework\App\Helper\AbstractHelper;
 
 class Calculator extends AbstractHelper
 {
-    const MIN_REVENUE = 1000;
+    const MIN_REVENUE = 10000;
 
     /** @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory */
     protected $_orderCollectionFactory;
@@ -15,6 +15,7 @@ class Calculator extends AbstractHelper
 
     /** @var \Magento\Sales\Model\ResourceModel\Order\Collection */
     protected $lastYearOrders;
+    protected $someVar;
 
     protected $last30DaySum = 0.00;
 
@@ -56,7 +57,6 @@ class Calculator extends AbstractHelper
         $from = date('Y-m-d h:i:s', $from); // 30 days before
 
         // get orders from set dates
-        // TODO-- Get useful columns instead of all columns
         $this->last30DayOrders = $this->_orderCollectionFactory->create()
              ->addFieldToSelect('*')
              ->addFieldToFilter('created_at', ['gteq' => $from])
@@ -84,7 +84,6 @@ class Calculator extends AbstractHelper
         $from = date('Y-m-d h:i:s', $from); // 30 days before
 
         // get orders from set dates
-        // TODO-- Get useful columns instead of all columns
         $this->lastYearOrders = $this->_orderCollectionFactory->create()
              ->addFieldToSelect('*')
              ->addFieldToFilter('created_at', ['gteq' => $from])
@@ -98,7 +97,6 @@ class Calculator extends AbstractHelper
             // update order information
             $this->setLastYearOrders();
         }
-
         return $this->lastYearOrders;
     }
 
@@ -115,3 +113,4 @@ class Calculator extends AbstractHelper
         $this->setLastYearOrders();
     }
 }
+
