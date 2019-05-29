@@ -5,6 +5,7 @@ use \Magento\Framework\App\Helper\AbstractHelper;
 
 class Calculator extends AbstractHelper
 {
+
     const MIN_REVENUE = 10000;
 
     /** @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory */
@@ -27,6 +28,7 @@ class Calculator extends AbstractHelper
         parent::__construct($context);
     }
 
+    // set a value of admin's revenue summary
     protected function setLast30DaySum($orders)
     {
         $sum = 0.00;

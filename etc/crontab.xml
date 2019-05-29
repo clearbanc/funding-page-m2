@@ -2,8 +2,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
   <group id="default">
     <job name="clearbanc_sales_aggregate" instance="Clearbanc\FundingPage\Cron\Sales" method="execute">
-      <!-- TODO: change this to be 24 hours -->
-      <schedule>* * * * *</schedule>
+      <!--aggreate and notify twice a month - every 1st and 15th-->
+      <schedule>0 0 1,15 * *</schedule>
     </job>
   </group>
 </config>

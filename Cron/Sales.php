@@ -69,7 +69,7 @@ class Sales
             $this->logger->info('User qualified for funding: sending notification');
              $this->sendNotification();
         } else {
-            $this->logger->info('User not yet qualified: will check in a week');
+            $this->logger->info('User not yet qualified: will check again in couple weeks');
         }
     }
 }
