@@ -12,7 +12,7 @@
         resource="Clearbanc_FundingPage::funding"/>
       <add 
         id="Clearbanc_FundingPage::funding_status" 
-        title="Status" 
+        title="Clearbanc Funding Status" 
         translate="title" 
         module="Clearbanc_FundingPage" 
         parent="Clearbanc_FundingPage::funding" 
