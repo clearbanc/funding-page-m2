@@ -1,5 +1,5 @@
 Clearbanc Funding Page extension for Magento v2
--------------------------------------------------
+-----------------------------------------------
 
 
 ### Installation
