@@ -45,14 +45,15 @@ class Sales
         $message = "Visit CLEARBANC.COM for more information.";
         $send = true;
 
-        // TODO add this back once everything is validated
-        //foreach ($inboxCollection as $item) {
-            //$notification = $item->getData();
-            //if ($notification['title'] == $title && $notification['description'] == $message) {
-                //$send = false;
-                //break;
-            //}
-        //}
+        // check to see if the user already has a notification in their inbox
+        // if so - skip sending it
+        foreach ($inboxCollection as $item) {
+            $notification = $item->getData();
+            if ($notification['title'] == $title && $notification['description'] == $message) {
+                $send = false;
+                break;
+            }
+        }
         if ($send) {
             $this->_inboxFactory->create()->addNotice($title, $message);
         }
