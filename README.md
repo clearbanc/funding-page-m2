@@ -4,7 +4,9 @@ Clearbanc Funding Status extension for Magento v2
 
 ### Installation
 
-You can install the Funding Status extension from [Magento Marketplace](https://marketplace.magento.com/) or manually via command line:
+You can install the Funding Status extension from [Magento Marketplace](https://marketplace.magento.com/).
+
+Alternatively, the extension can be installed manually via command line:
 
 Use composer to fetch the package:
 ```bash
