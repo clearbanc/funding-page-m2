@@ -2,6 +2,8 @@
 
 namespace Clearbanc\FundingPage\Block;
 
+use \Clearbanc\FundingPage\Helper\Calculator;
+
 class Display extends \Magento\Framework\View\Element\Template
 {
     protected $calculator;
@@ -10,9 +12,9 @@ class Display extends \Magento\Framework\View\Element\Template
      * Constructor for display
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Clearbanc\FundingPage\Helper\Calculator $calculator
-     * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
-     * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param \Clearbanc\FundingPage\Helper\Calculator         $calculator
+     * @param \Magento\Framework\HTTP\ZendClientFactory        $httpClientFactory
+     * @param \Magento\Backend\Model\Auth\Session              $authSession
      * @param array $data
      */
     public function __construct(
@@ -71,11 +73,11 @@ class Display extends \Magento\Framework\View\Element\Template
     /**
      *  Public getter for getMinRevenue
      *
-     * @return calculator::MIN_REVENUE()
+     * @return Calculator::MIN_REVENUE()
      */
     public function getMinRevenue()
     {
-        return $this->calculator::MIN_REVENUE;
+        return Calculator::MIN_REVENUE;
     }
 
     /**
@@ -85,6 +87,6 @@ class Display extends \Magento\Framework\View\Element\Template
      */
     public function isQualified()
     {
-        return $this->calculator->getLast30DaySum() > $this->calculator::MIN_REVENUE;
+        return $this->calculator->getLast30DaySum() > Calculator::MIN_REVENUE;
     }
 }

@@ -53,10 +53,8 @@ class Calculator extends AbstractHelper
     // update Orders
     protected function setLast30DaysOrders()
     {
-        // set date ranges for order collection search
-        $to = date("Y-m-d h:i:s"); // current date
-        $from = strtotime('-30 day', strtotime($to));
-        $from = date('Y-m-d h:i:s', $from); // 30 days before
+        $to = date("Y-m-d h:i:s");
+        $from = date("Y-m-d h:i:s", strtotime("-1 month"));
 
         // get orders from set dates
         $this->last30DayOrders = $this->_orderCollectionFactory->create()
@@ -80,10 +78,8 @@ class Calculator extends AbstractHelper
 
     public function setLastYearOrders()
     {
-        // set date ranges for order collection search
-        $to = date("Y-m-d h:i:s"); // current date
-        $from = strtotime('-1 year', strtotime($to));
-        $from = date('Y-m-d h:i:s', $from); // 30 days before
+        $to = date("Y-m-d h:i:s");
+        $from = date("Y-m-d h:i:s", strtotime("-1 year"));
 
         // get orders from set dates
         $this->lastYearOrders = $this->_orderCollectionFactory->create()

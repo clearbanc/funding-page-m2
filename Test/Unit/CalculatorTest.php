@@ -7,35 +7,29 @@ use Clearbanc\FundingPage\Test\Mock\CalculatorMock;
 class CalculatorTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var ObjectManagerHelper
-     */
-    private $objectManagerHelper;
-    
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private  $contextMock;
+    private $contextMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private  $orderCollectionFactoryMock;
+    private $orderCollectionFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $orderMock;
 
-
-    protected function setUp()
+    function setUp()
     {
 
-        $this->contextMock 
+        $this->contextMock
             = $this->getMockBuilder(\Magento\Framework\App\Helper\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->orderCollectionFactoryMock 
+        $this->orderCollectionFactoryMock
             = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -50,15 +44,16 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->calcMock = new CalculatorMock($this->contextMock, $this->orderCollectionFactoryMock);
-
     }
+
     /**
      * @test   Qualification logic within Calculator for the nightly job
      * @return null
      */
-    public function TestQualification() {
+    public function testQualification() 
+    {
         // assert that 10k minimum is set for qualification
-        $this->assertEquals($this->calcMock::MIN_REVENUE, 10 * 1000);
+        $this->assertEquals(CalculatorMock::MIN_REVENUE, 10 * 1000);
 
         // set a mock revenue of 30k
         // assert that getLast30DaySum returns the correct amount
