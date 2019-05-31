@@ -10,9 +10,9 @@ class Display extends \Magento\Framework\View\Element\Template
      * Constructor for display
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Clearbanc\FundingPage\Helper\Calculator $calculator
-     * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
-     * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param \Clearbanc\FundingPage\Helper\Calculator         $calculator
+     * @param \Magento\Framework\HTTP\ZendClientFactory        $httpClientFactory
+     * @param \Magento\Backend\Model\Auth\Session              $authSession
      * @param array $data
      */
     public function __construct(

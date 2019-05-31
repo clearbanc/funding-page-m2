@@ -13,10 +13,10 @@ class Sales
     /**
      * Contructor for Cron
      *
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
-     * @param \Magento\Store\Model\Information $storeInfo
-     * @param \Clearbanc\FundingPage\Helper\Calculator $calculator
+     * @param \Psr\Log\LoggerInterface                      $logger
+     * @param \Magento\Framework\HTTP\ZendClientFactory     $httpClientFactory
+     * @param \Magento\Store\Model\Information              $storeInfo
+     * @param \Clearbanc\FundingPage\Helper\Calculator      $calculator
      * @param \Magento\AdminNotification\Model\InboxFactory $inboxFactory
      */
     public function __construct(

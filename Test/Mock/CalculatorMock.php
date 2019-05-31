@@ -7,7 +7,8 @@ use Clearbanc\FundingPage\Helper\Calculator;
  * Mocks the Calculator class to make it testable
  *
  */
-class CalculatorMock extends Calculator {
+class CalculatorMock extends Calculator
+{
     /**
      * Update a protected variable via mock to test getter piece
      *
