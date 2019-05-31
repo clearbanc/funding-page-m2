@@ -53,7 +53,7 @@ class CalculatorTest extends \PHPUnit\Framework\TestCase
     public function testQualification() 
     {
         // assert that 10k minimum is set for qualification
-        $this->assertEquals($this->calcMock::MIN_REVENUE, 10 * 1000);
+        $this->assertEquals(CalculatorMock::MIN_REVENUE, 10 * 1000);
 
         // set a mock revenue of 30k
         // assert that getLast30DaySum returns the correct amount

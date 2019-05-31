@@ -2,6 +2,8 @@
 
 namespace Clearbanc\FundingPage\Block;
 
+use \Clearbanc\FundingPage\Helper\Calculator;
+
 class Display extends \Magento\Framework\View\Element\Template
 {
     protected $calculator;
@@ -71,11 +73,11 @@ class Display extends \Magento\Framework\View\Element\Template
     /**
      *  Public getter for getMinRevenue
      *
-     * @return calculator::MIN_REVENUE()
+     * @return Calculator::MIN_REVENUE()
      */
     public function getMinRevenue()
     {
-        return $this->calculator::MIN_REVENUE;
+        return Calculator::MIN_REVENUE;
     }
 
     /**
@@ -85,6 +87,6 @@ class Display extends \Magento\Framework\View\Element\Template
      */
     public function isQualified()
     {
-        return $this->calculator->getLast30DaySum() > $this->calculator::MIN_REVENUE;
+        return $this->calculator->getLast30DaySum() > Calculator::MIN_REVENUE;
     }
 }
